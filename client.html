@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Socket.IO Chat Tester (Typing = value-based)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 24px; line-height: 1.4; }
+    .row { margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    label { min-width: 120px; display: inline-block; font-weight: 600; }
+    input, textarea { padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px; }
+    button { padding: 6px 10px; cursor: pointer; border-radius: 6px; border: 1px solid #bbb; background: #f7f7f7; }
+    button:hover { background: #eee; }
+    #log { background: #0e0e0e; color: #e6e6e6; padding: 12px; height: 340px; overflow: auto; border-radius: 8px; white-space: pre-wrap; }
+    .small { color: #666; font-size: 12px; }
+    .hint { color: #444; background: #f3f3ff; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Socket.IO Chat Tester (Typing = value-based)</h1>
+
+  <div class="hint">
+    Buka di 2 tab (JWT berbeda) dan Room yang sama. <br/>
+    <b>typing:true</b> saat textarea berisi teks, <b>typing:false</b> saat textarea kosong.
+  </div>
+
+  <div class="row">
+    <label>Socket URL</label>
+    <input id="socketUrl" size="40" value="http://localhost:4000" />
+  </div>
+  <div class="row">
+    <label>JWT Token</label>
+    <input id="token" size="70" placeholder="Tempel JWT hasil login di sini" />
+  </div>
+  <div class="row">
+    <label>Room ID</label>
+    <input id="roomId" size="40" placeholder="Tempel _id room di sini" />
+  </div>
+
+  <div class="row">
+    <button id="btnConnect">Connect</button>
+    <button id="btnDisconnect">Disconnect</button>
+    <span class="small">Jika gagal connect: cek JWT & CORS Socket.IO.</span>
+  </div>
+
+  <div class="row">
+    <button id="btnJoin">Join Room</button>
+    <button id="btnLeave">Leave Room</button>
+  </div>
+
+  <div class="row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+    <textarea id="message" rows="3" cols="60" placeholder="Tulis pesan di sini... (typing mengikuti isi textarea)"></textarea>
+    <div class="small">Tips: <code>Ctrl/Cmd + Enter</code> untuk kirim via Socket.</div>
+  </div>
+  <div class="row">
+    <button id="btnSendSocket">Kirim via Socket</button>
+    <button id="btnSendHTTP">Kirim via HTTP (POST)</button>
+  </div>
+
+  <h3>Event Log</h3>
+  <div id="log"></div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const log = (msg) => {
+      const now = new Date().toISOString();
+      $("log").textContent += `\n[${now}] ${msg}`;
+      $("log").scrollTop = $("log").scrollHeight;
+    };
+
+    let socket = null;
+    let isTypingLocal = false;
+
+    const currentRoomId = () => ($("roomId").value || "").trim();
+
+    function sendTyping(isTyping) {
+      if (!socket || !currentRoomId()) return;
+      socket.emit("typing", { roomId: currentRoomId(), isTyping: !!isTyping });
+      log((isTyping ? "⌨️ typing:true" : "⌨️ typing:false") + " emitted");
+    }
+
+    function updateTypingFromValue() {
+      const hasText = ($("message").value || "").trim().length > 0;
+      if (hasText && !isTypingLocal) {
+        isTypingLocal = true;
+        sendTyping(true);
+      } else if (!hasText && isTypingLocal) {
+        isTypingLocal = false;
+        sendTyping(false);
+      }
+    }
+
+    $("btnConnect").onclick = () => {
+      const url = $("socketUrl").value.trim();
+      const token = $("token").value.trim();
+      if (!url || !token) {
+        alert("Socket URL dan JWT token wajib diisi.");
+        return;
+      }
+      socket = io(url, { auth: { token } });
+
+      socket.on("connect", () => log("✅ connected: " + socket.id));
+      socket.on("disconnect", (r) => log("❌ disconnected: " + r));
+      socket.on("connect_error", (e) => log("⚠️ connect_error: " + e.message));
+
+      socket.on("chatMessage", (p) => log("💬 chatMessage: " + JSON.stringify(p)));
+      socket.on("typing", (p) => log("⌨️ typing (rx): " + JSON.stringify(p)));
+      socket.on("userOnline", (p) => log("🟢 userOnline: " + JSON.stringify(p)));
+      socket.on("userOffline", (p) => log("🔴 userOffline: " + JSON.stringify(p)));
+    };
+
+    $("btnDisconnect").onclick = () => {
+      if (socket) socket.disconnect();
+      socket = null;
+    };
+
+    $("btnJoin").onclick = () => {
+      if (!socket) return alert("Connect dulu");
+      const rid = currentRoomId();
+      if (!rid) return alert("Room ID wajib diisi");
+      socket.emit("joinRoom", { roomId: rid });
+      log("➡️ joinRoom emitted");
+      updateTypingFromValue();
+    };
+
+    $("btnLeave").onclick = () => {
+      if (!socket) return alert("Connect dulu");
+      const rid = currentRoomId();
+      if (!rid) return alert("Room ID wajib diisi");
+      socket.emit("leaveRoom", { roomId: rid });
+      log("⬅️ leaveRoom emitted");
+    };
+
+    $("message").addEventListener("input", updateTypingFromValue);
+
+    $("message").addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        $("btnSendSocket").click();
+      }
+    });
+
+    $("btnSendSocket").onclick = () => {
+      if (!socket) return alert("Connect dulu");
+      const rid = currentRoomId();
+      if (!rid) return alert("Room ID wajib diisi");
+      const content = $("message").value;
+      if (!content.trim()) return alert("Isi pesan dulu");
+
+      socket.emit("chatMessage", { roomId: rid, content });
+      log("📨 chatMessage (socket) emitted");
+
+      $("message").value = "";
+      updateTypingFromValue();
+    };
+
+    $("btnSendHTTP").onclick = async () => {
+      const base = $("socketUrl").value.trim();
+      const token = $("token").value.trim();
+      const rid = currentRoomId();
+      const content = $("message").value;
+
+      if (!base || !token || !rid || !content.trim()) {
+        return alert("Base URL, token, roomId, dan pesan wajib diisi.");
+      }
+      try {
+        const res = await fetch(`${base}/api/rooms/${rid}/messages`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({ content })
+        });
+        const data = await res.json();
+        log("📨 chatMessage (HTTP) response: " + JSON.stringify(data));
+
+        $("message").value = "";
+        updateTypingFromValue();
+      } catch (e) {
+        log("HTTP error: " + e.message);
+      }
+    };
+  </script>
+</body>
+</html>
