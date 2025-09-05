@@ -23,3 +23,7 @@ Aplikasi chat sederhana dengan:
 
 ### 2) Konfigurasi Backend (`.env`)
 Buat file `.env`:
+PORT=4000
+MONGODB_URI=mongodb+srv://zildirayalfirli_db_user:5TSyqlB68CCQd6h7@chatapp.bljqm8z.mongodb.net/chatapp?retryWrites=true&w=majority&appName=chatapp
+JWT_SECRET=supersecretkey
+JWT_EXPIRES=1d
