@@ -40,3 +40,17 @@ npm install
 npm run dev   # or: npm start
 # → http://localhost:4000
 ```
+
+---
+
+## 🔧 Request & Response
+
+Import Sagara Test.postman_collection.json on your postman app
+
+Register
+
+POST /api/auth/register
+
+```
+{ "username": "alice", "password": "secret" }
+```
