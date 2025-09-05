@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "9b531262-5445-4b41-b038-a8961a3c1a65",
+		"name": "Sagara Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28253796",
+		"_collection_link": "https://winter-meteor-67143.postman.co/workspace/My-Workspace~c29fb4d4-653b-4db0-88b4-3860c779fe97/collection/28253796-9b531262-5445-4b41-b038-a8961a3c1a65?action=share&source=collection_link&creator=28253796"
+	},
+	"item": [
+		{
+			"name": "Log In",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"username\": \"Zildiray\", \n    \"password\": \"secret123\" \n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"username\": \"ADMIN80\", \n    \"password\": \"secret123\" \n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Chat Room",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjljYzZhYmNkMTk5MTcxMWJiODYyNyIsInVzZXJuYW1lIjoiWmlsZGlyYXkiLCJpYXQiOjE3NTcwNTMwODcsImV4cCI6MTc1NzEzOTQ4N30.-UTKiOsEO8lPTMxvsOw8Bd8hWkoAYZg0M-h6LHK9v9k",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Diskusi  Internal 2\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/rooms",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Chat Rooms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/rooms",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Chat Room By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/rooms/68ba7d8103e8b831b69f47b0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms",
+						"68ba7d8103e8b831b69f47b0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Join Specific Room",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjljYzZhYmNkMTk5MTcxMWJiODYyNyIsInVzZXJuYW1lIjoiWmlsZGlyYXkiLCJpYXQiOjE3NTcwMDc0ODMsImV4cCI6MTc1NzYxMjI4M30.aAWZDl2rSmpamA_pGfolvCw4PmXvGA-GvcxktswSRIc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/rooms/68ba7d8103e8b831b69f47b0/join",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms",
+						"68ba7d8103e8b831b69f47b0",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Messages in a Room",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjljYzZhYmNkMTk5MTcxMWJiODYyNyIsInVzZXJuYW1lIjoiWmlsZGlyYXkiLCJpYXQiOjE3NTcwMDc0ODMsImV4cCI6MTc1NzYxMjI4M30.aAWZDl2rSmpamA_pGfolvCw4PmXvGA-GvcxktswSRIc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/rooms/68b9cc57bcd1991711bb8624/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms",
+						"68b9cc57bcd1991711bb8624",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send a New Message",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjljYzZhYmNkMTk5MTcxMWJiODYyNyIsInVzZXJuYW1lIjoiWmlsZGlyYXkiLCJpYXQiOjE3NTcwNTM4NDMsImV4cCI6MTc1NzE0MDI0M30.aF5YXYZn5c3TMcHps-6l_NO6qa2CV-3pZhJRNkNKUVA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"content\": \"Hello guys!\" }\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/api/rooms/68b9cc57bcd1991711bb8624/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"rooms",
+						"68b9cc57bcd1991711bb8624",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current User Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YjljYzZhYmNkMTk5MTcxMWJiODYyNyIsInVzZXJuYW1lIjoiWmlsZGlyYXkiLCJpYXQiOjE3NTcwMDc0ODMsImV4cCI6MTc1NzYxMjI4M30.aAWZDl2rSmpamA_pGfolvCw4PmXvGA-GvcxktswSRIc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/users/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
