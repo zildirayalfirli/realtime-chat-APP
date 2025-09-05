@@ -24,20 +24,10 @@ A simple chat application with:
 - Node.js 18+
 - MongoDB running locally or a cloud URI
 
-### 2) Backend `.env` (`.env`)
+### 2) Backend `.env`
 
 ```env
 PORT=4000
-MONGO_URI=mongodb://localhost:27017/chatapp
-JWT_SECRET=supersecret_change_me
-JWT_EXPIRES=7d
-
-
-## ▶️ Menjalankan Aplikasi
-
-### Backend
-```bash
-cd chat-backend
-npm install
-npm run dev   # atau npm start
-# http://localhost:4000
+MONGODB_URI=mongodb+srv://zildirayalfirli_db_user:5TSyqlB68CCQd6h7@chatapp.bljqm8z.mongodb.net/chatapp?retryWrites=true&w=majority&appName=chatapp
+JWT_SECRET=supersecretkey
+JWT_EXPIRES=1d
