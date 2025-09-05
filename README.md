@@ -1,17 +1,19 @@
 # Realtime Chat App — Express, MongoDB, Socket.IO, React
 
-Aplikasi chat sederhana dengan:
-- Auth JWT (login/register)
-- Room (buat, daftar, detail, join)
-- Chat realtime (Socket.IO) + persist ke MongoDB
-- Typing indicator & presence online/offline (snapshot per join/leave/disconnect)
+A simple chat application with:
+
+- JWT authentication (register/login)
+- Rooms (create, list, detail, join)
+- Realtime chat with Socket.IO + MongoDB persistence
+- Typing indicator & online/offline presence (room snapshot on join/leave/disconnect)
 
 ---
 
-## 📦 Tech Stack
-- Backend: Node.js, Express, Socket.IO, MongoDB
-- Auth: JWT
-- Frontend: React (Vite)
+## 🧰 Tech Stack
+
+- **Backend:** Node.js (Express 5), Socket.IO, Mongoose (MongoDB)
+- **Auth:** JWT
+- **Frontend:** React (Vite)
 
 ---
 
